@@ -1,0 +1,157 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<specification xsi:schemaLocation="http://opendse.sourceforge.net http://opendse.sourceforge.net/schema.xsd" xmlns="http://opendse.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <architecture>
+    <resource id="Switch">
+      <attributes>
+        <attribute name="TYPE" type="STRING">Switch</attribute>
+        <attribute name="Gesamtspeicher" type="INT">123</attribute>
+        <attribute name="Blockgröße" type="INT">124</attribute>
+        <attribute name="#Queues" type="INT">8</attribute>
+      </attributes>
+    </resource>
+    <resource id="RoutingProcessor">
+      <attributes></attributes>
+    </resource>
+    <resource id="SwitchFabric">
+      <attributes></attributes>
+    </resource>
+    <resource id="HC1">
+      <attributes>
+        <attribute name="TYPE" type="STRING">ECU</attribute>
+        <attribute name="is router" type="BOOL">true</attribute>
+        <attribute name="FLOPS" type="INT">600000000</attribute>
+      </attributes>
+    </resource>
+    <resource id="HC2">
+      <attributes>
+        <attribute name="TYPE" type="STRING">ECU</attribute>
+        <attribute name="is router" type="BOOL">true</attribute>
+        <attribute name="FLOPS" type="INT">2000000000</attribute>
+      </attributes>
+    </resource>
+    <link id="link_x" source="HC1" destination="Switch" orientation="UNDIRECTED">
+      <attributes>
+        <attribute name="TYPE" type="STRING">Ethernet</attribute>
+        <attribute name="link speed" type="STRING">1 GBit/s</attribute>
+        <attribute name="bandwidth" type="INT">125000000</attribute>
+      </attributes>
+    </link>
+    <link id="link_y" source="Switch" destination="HC2" orientation="UNDIRECTED">
+      <attributes>
+        <attribute name="TYPE" type="STRING">Ethernet</attribute>
+        <attribute name="link speed" type="STRING">1 GBit/s</attribute>
+        <attribute name="bandwidth" type="INT">125000000</attribute>
+      </attributes>
+    </link>
+  </architecture>
+  <application>
+    <task id="FC4">
+      <attributes>
+        <attribute name="priority" type="INT">12</attribute>
+        <attribute name="FLOP" type="INT">10000000</attribute>
+      </attributes>
+    </task>
+    <task id="FC5">
+      <attributes>
+        <attribute name="period" type="DOUBLE">20.0</attribute>
+        <attribute name="FLOP" type="INT">10000000</attribute>
+      </attributes>
+    </task>
+    <task id="FC6">
+      <attributes>
+        <attribute name="priority" type="INT">8</attribute>
+        <attribute name="FLOP" type="INT">10000000</attribute>
+      </attributes>
+    </task>
+    <task id="FC7">
+      <attributes>
+        <attribute name="priority" type="INT">6</attribute>
+        <attribute name="FLOP" type="INT">10000000</attribute>
+      </attributes>
+    </task>
+    <task id="FC8">
+      <attributes>
+        <attribute name="priority" type="INT">0</attribute>
+        <attribute name="FLOP" type="INT">10000000</attribute>
+      </attributes>
+    </task>
+    <task id="FC9">
+      <attributes>
+        <attribute name="priority" type="INT">6</attribute>
+        <attribute name="FLOP" type="INT">10000000</attribute>
+      </attributes>
+    </task>
+    <task id="FC10">
+      <attributes>
+        <attribute name="period" type="DOUBLE">20.0</attribute>
+        <attribute name="priority" type="INT">6</attribute>
+        <attribute name="FLOP" type="INT">10000000</attribute>
+      </attributes>
+    </task>
+    <task id="FC11">
+      <attributes>
+        <attribute name="period" type="DOUBLE">20.0</attribute>
+        <attribute name="priority" type="INT">3</attribute>
+        <attribute name="FLOP" type="INT">10000000</attribute>
+      </attributes>
+    </task>
+    <task id="FC12">
+      <attributes>
+        <attribute name="period" type="DOUBLE">20.0</attribute>
+        <attribute name="priority" type="INT">1</attribute>
+        <attribute name="FLOP" type="INT">10000000</attribute>
+      </attributes>
+    </task>
+    <communication id="msg1">
+      <attributes>
+        <attribute name="priority" type="INT">0</attribute>
+        <attribute name="transport protocol" type="STRING">UDP</attribute>
+        <attribute name="size" type="INT">6</attribute>
+        <attribute name="minsize" type="INT">0</attribute>
+        <attribute name="period" type="DOUBLE">1</attribute>
+      </attributes>
+    </communication>
+    <communication id="msg2">
+      <attributes>
+        <attribute name="priority" type="INT">1</attribute>
+        <attribute name="transport protocol" type="STRING">UDP</attribute>
+        <attribute name="size" type="INT">12</attribute>
+      </attributes>
+    </communication>
+    <communication id="msg3">
+      <attributes>
+        <attribute name="priority" type="INT">2</attribute>
+        <attribute name="transport protocol" type="STRING">UDP</attribute>
+        <attribute name="size" type="INT">22</attribute>
+        <attribute name="minsize" type="INT">9</attribute>
+      </attributes>
+    </communication>
+    <communication id="msg4">
+      <attributes>
+        <attribute name="priority" type="INT">0</attribute>
+        <attribute name="transport protocol" type="STRING">UDP</attribute>
+        <attribute name="size" type="INT">12</attribute>
+        <attribute name="minsize" type="INT">0</attribute>
+        <attribute name="period" type="DOUBLE">2</attribute>
+      </attributes>
+    </communication>
+    <dependency id="dependency_z" source="FC5" destination="msg1" orientation="DIRECTED" />
+    <dependency id="dependency_z_0" source="msg1" destination="FC7" orientation="DIRECTED" />
+    <dependency id="dependency_z_1" source="msg1" destination="FC8" orientation="DIRECTED" />
+    <dependency id="dependency_z_2" source="msg1" destination="FC6" orientation="DIRECTED" />
+    <dependency id="dependency_a" source="FC8" destination="msg2" orientation="DIRECTED" />
+    <dependency id="dependency_a_0" source="msg2" destination="FC4" orientation="DIRECTED" />
+  </application>
+  <mappings>
+    <mapping id="mapping_a" source="FC4" target="HC1" />
+    <mapping id="mapping_x" source="FC4" target="HC2" />
+    <mapping id="mapping_b" source="FC5" target="HC1" />
+    <mapping id="mapping_c" source="FC6" target="HC1" />
+    <mapping id="mapping_d" source="FC7" target="HC2" />
+    <mapping id="mapping_e" source="FC8" target="HC2" />
+    <mapping id="mapping_f" source="FC9" target="HC2" />
+    <mapping id="mapping_10" source="FC10" target="HC2" />
+    <mapping id="mapping_11" source="FC11" target="HC2" />
+    <mapping id="mapping_12" source="FC12" target="HC2" />
+  </mappings>
+</specification>
